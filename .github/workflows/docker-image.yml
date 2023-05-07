@@ -16,7 +16,7 @@ jobs:
     - name: Rootfs
       run: |
         cd rootfs
-        sh build.sh
+        sudo sh build.sh
         cd ..
 
     - name: Vib
