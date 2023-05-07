@@ -1,0 +1,3 @@
+rootfs/vanilla-pico
+rootfs/*.tar.gz
+Containerfile
