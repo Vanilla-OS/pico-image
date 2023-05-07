@@ -5,5 +5,5 @@ singlelayer: true
 labels:
   maintainer: Vanilla OS Contributors
 adds:
-  rootfs/vanilla-pico: /
+  rootfs/vanilla-pico.tar.gz: /
 cmd: "/bin/bash"

@@ -63,5 +63,5 @@ done
 chroot $ROOTFS_NAME apt-key add /$REPO_KEY
 
 # Compression
-tar -czf $ROOTFS_NAME.tar.gz $ROOTFS_NAME
+tar -czf $ROOTFS_NAME.tar.gz -C $ROOTFS_NAME .
 chmod 644 $ROOTFS_NAME.tar.gz
