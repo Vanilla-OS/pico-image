@@ -14,7 +14,8 @@ CLEANUP_DIRS="/usr/share/doc/*
 /usr/share/doc/kde/HTML/*/*
 /usr/share/gnome/help/*/*
 /usr/share/locale/*
-/usr/share/omf/*/*-*.emf"
+/usr/share/omf/*/*-*.emf
+/var/cache"
 
 # Root check - debootstrap requires root privileges
 if [ "$(id -u)" != "0" ];
@@ -64,5 +65,8 @@ for dir in $CLEANUP_DIRS; do
 done
 
 # Compression
-tar -czf $ROOTFS_NAME.tar.gz -C $ROOTFS_NAME .
-chmod 644 $ROOTFS_NAME.tar.gz
+tar -czf $ROOTFS_NAME.tar -C $ROOTFS_NAME .
+zstd -19 $ROOTFS_NAME.tar
+rm $ROOTFS_NAME.tar
+chmod 644 $ROOTFS_NAME.tar.zst
+
