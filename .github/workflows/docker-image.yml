@@ -43,4 +43,4 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: vanilla-pico-rootfs
-        path: rootfs/vanilla-pico.tar.gz
+        path: rootfs/vanilla-pico.tar.zst
