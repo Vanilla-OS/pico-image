@@ -54,9 +54,10 @@ chroot $ROOTFS_NAME apt-key add /$REPO_KEY
 rm -rf $ROOTFS_NAME/etc/apt/sources.list
 
 # Cleanup
-chroot $ROOTFS_NAME apt-get upgrade -y
-chroot $ROOTFS_NAME apt-get clean
-chroot $ROOTFS_NAME apt-get autoremove -y
+chroot $ROOTFS_NAME apt update
+chroot $ROOTFS_NAME apt upgrade -y
+chroot $ROOTFS_NAME apt clean
+chroot $ROOTFS_NAME apt autoremove -y
 
 for dir in $CLEANUP_DIRS; do
     rm -rf $ROOTFS_NAME/$dir
