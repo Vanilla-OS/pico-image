@@ -1,0 +1,9 @@
+base: scratch
+name: Vanilla Pico
+id: vanilla-pico
+singlelayer: true
+labels:
+  maintainer: Vanilla OS Contributors
+adds:
+  rootfs/vanilla-pico.tar.gz: /
+cmd: "/bin/bash"
