@@ -27,7 +27,7 @@ jobs:
         ./vib build recipe.yml
 
     - name: Build the Docker image
-      run: docker image build -f Containerfile --tag vanillaos/pico:${{ github.ref_name }} .
+      run: sudo docker image build -f Containerfile --tag vanillaos/pico:${{ github.ref_name }} .
 
     - name: Push To Registry
       uses: redhat-actions/push-to-registry@v2.7
