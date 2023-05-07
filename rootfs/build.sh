@@ -64,6 +64,9 @@ for dir in $CLEANUP_DIRS; do
     rm -rf $ROOTFS_NAME/$dir
 done
 
+# Restore apt cache directory
+mkdir -p /var/lib/apt/lists/partial
+
 # Compression
 tar -cvf $ROOTFS_NAME.tar -C $ROOTFS_NAME .
 zstd -19 $ROOTFS_NAME.tar
