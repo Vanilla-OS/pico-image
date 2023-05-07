@@ -39,3 +39,8 @@ jobs:
         username: ${{ secrets.NEXUS_USER }}
         password: ${{ secrets.NEXUS_PSW }}
         tls-verify: false
+    
+    - uses: actions/upload-artifact@v3
+      with:
+        name: vanilla-pico-rootfs
+        path: rootfs/vanilla-pico.tar.gz
