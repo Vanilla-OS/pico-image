@@ -65,7 +65,7 @@ for dir in $CLEANUP_DIRS; do
 done
 
 # Restore apt cache directory
-mkdir -p /var/cache/apt/archives/partial
+mkdir -p $ROOTFS_NAME/var/cache/apt/archives/partial
 
 # Compression
 tar -cvf $ROOTFS_NAME.tar -C $ROOTFS_NAME .
