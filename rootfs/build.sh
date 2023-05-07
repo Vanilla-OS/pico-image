@@ -50,10 +50,6 @@ debootstrap \
 # the correct sources.list file.
 rm -rf $ROOTFS_NAME/etc/apt/sources.list
 
-for dir in $CLEANUP_DIRS; do
-    rm -rf $ROOTFS_NAME/$dir
-done
-
 # Add the vanilla extra repository key
 chroot $ROOTFS_NAME apt-key add /$REPO_KEY
 
@@ -61,6 +57,10 @@ chroot $ROOTFS_NAME apt-key add /$REPO_KEY
 chroot $ROOTFS_NAME apt-get upgrade -y
 chroot $ROOTFS_NAME apt-get clean
 chroot $ROOTFS_NAME apt-get autoremove -y
+
+for dir in $CLEANUP_DIRS; do
+    rm -rf $ROOTFS_NAME/$dir
+done
 
 # Compression
 tar -czf $ROOTFS_NAME.tar.gz -C $ROOTFS_NAME .
