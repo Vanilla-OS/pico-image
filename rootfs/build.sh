@@ -63,3 +63,4 @@ chroot $ROOTFS_NAME apt-key add /$REPO_KEY
 
 # Your rootfs is ready sir!
 tar -czf $ROOTFS_NAME.tar.gz $ROOTFS_NAME
+chmod 644 $ROOTFS_NAME.tar.gz

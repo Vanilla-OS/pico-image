@@ -25,9 +25,10 @@ jobs:
         wget https://github.com/Vanilla-OS/Vib/releases/download/v0.2.7/vib
         chmod +x vib
         ./vib build recipe.yml
+        sed -i '/\/var\/tmp\/*/{d}' Containerfile
 
     - name: Build the Docker image
-      run: sudo docker image build -f Containerfile --tag vanillaos/pico:${{ github.ref_name }} .
+      run: docker image build -f Containerfile --tag vanillaos/pico:${{ github.ref_name }} .
 
     - name: Push To Registry
       uses: redhat-actions/push-to-registry@v2.7
