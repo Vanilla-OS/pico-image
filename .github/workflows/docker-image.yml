@@ -15,6 +15,7 @@ jobs:
 
     - name: Rootfs
       run: |
+        apt install -y debootstrap
         cd rootfs
         sudo sh build.sh
         cd ..
