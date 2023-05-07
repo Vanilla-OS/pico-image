@@ -51,6 +51,7 @@ debootstrap \
 rm -rf $ROOTFS_NAME/etc/apt/sources.list
 
 # Cleanup
+chroot $ROOTFS_NAME apt-get upgrade -y
 chroot $ROOTFS_NAME apt-get clean
 chroot $ROOTFS_NAME apt-get autoremove -y
 
