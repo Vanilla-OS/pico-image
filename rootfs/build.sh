@@ -45,13 +45,13 @@ debootstrap \
     $ROOTFS_NAME \
     $REPO_URL
 
+# Add the vanilla extra repository key
+chroot $ROOTFS_NAME apt-key add /$REPO_KEY
+
 # We need to remove the sources.list file since it is not needed
 # after the debootstrap process. include.chroot already contains
 # the correct sources.list file.
 rm -rf $ROOTFS_NAME/etc/apt/sources.list
-
-# Add the vanilla extra repository key
-chroot $ROOTFS_NAME apt-key add /$REPO_KEY
 
 # Cleanup
 chroot $ROOTFS_NAME apt-get upgrade -y
