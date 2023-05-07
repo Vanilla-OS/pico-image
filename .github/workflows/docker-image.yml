@@ -15,7 +15,7 @@ jobs:
 
     - name: Rootfs
       run: |
-        sudo apt install -y debootstrap
+        sudo apt install -y debootstrap podman
         cd rootfs
         sudo sh build.sh
         cd ..
@@ -28,7 +28,7 @@ jobs:
         sed -i '/\/var\/tmp\/*/{d}' Containerfile
 
     - name: Build the Docker image
-      run: docker image build -f Containerfile --tag vanillaos/pico:${{ github.ref_name }} .
+      run: podman image build -f Containerfile --tag vanillaos/pico:${{ github.ref_name }} .
 
     - name: Push To Registry
       uses: redhat-actions/push-to-registry@v2.7
