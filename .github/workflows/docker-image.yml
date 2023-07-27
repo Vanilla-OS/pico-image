@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-    IMAGE_REGISTRY: https://ghcr.io/${{ github.repository_owner }}
+    IMAGE_REGISTRY: ghcr.io/vanilla-os
     REGISTRY_USER: ${{ github.actor }}
     REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
@@ -48,12 +48,11 @@ jobs:
 
     # Push the image to GHCR (Image Registry)
     - name: Push To GHCR
-      uses: redhat-actions/push-to-registry@v2
-      id: push
+      uses: redhat-actions/push-to-registry@v2.7
       with:
+        registry: ${{ env.IMAGE_REGISTRY }}
         image: pico
         tags: ${{ github.ref_name }}
-        registry: ${{ env.IMAGE_REGISTRY }}
         username: ${{ env.REGISTRY_USER }}
         password: ${{ env.REGISTRY_PASSWORD }}
         extra-args: |
