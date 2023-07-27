@@ -34,6 +34,7 @@ jobs:
         sed -i '/\/var\/tmp\/*/{d}' Containerfile
 
     - name: Build the Docker image
+      id: build-action
       run: podman image build -f Containerfile --tag vanillaos/pico:${{ github.ref_name }} .
 
     # - name: Push To Registry
