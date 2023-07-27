@@ -51,7 +51,7 @@ jobs:
       uses: redhat-actions/push-to-registry@v2
       id: push
       with:
-        image: pico
+        image: ${{ steps.build-action.outputs.image }}
         tags: ${{ github.ref_name }}
         registry: ${{ env.IMAGE_REGISTRY }}
         username: ${{ env.REGISTRY_USER }}
