@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
 
 env:
-    IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+    IMAGE_REGISTRY: https://ghcr.io/${{ github.repository_owner }}
     REGISTRY_USER: ${{ github.actor }}
-    REGISTRY_PASSWORD: ${{ github.token }}
+    REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
 
@@ -34,7 +34,6 @@ jobs:
         sed -i '/\/var\/tmp\/*/{d}' Containerfile
 
     - name: Build the Docker image
-      id: build-action
       run: podman image build -f Containerfile --tag vanillaos/pico:${{ github.ref_name }} .
 
     # - name: Push To Registry
@@ -52,7 +51,7 @@ jobs:
       uses: redhat-actions/push-to-registry@v2
       id: push
       with:
-        image: ${{ steps.build-action.outputs.image }}
+        image: pico
         tags: ${{ github.ref_name }}
         registry: ${{ env.IMAGE_REGISTRY }}
         username: ${{ env.REGISTRY_USER }}
