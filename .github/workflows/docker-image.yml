@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main", "ghcr" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 env:
@@ -36,6 +36,7 @@ jobs:
     - name: Build the Docker image
       run: podman image build -f Containerfile --tag vanillaos/pico:${{ github.ref_name }} .
 
+    # Push the image to Nexus (Image Registry)
     # - name: Push To Registry
     #   uses: redhat-actions/push-to-registry@v2.7
     #   with:
