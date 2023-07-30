@@ -1,8 +1,8 @@
 # Vanilla OS Pico Image
-Containerfile for building a vanilla OS Pico image.
 
-> This image is not intended to be used directly. It is used as a base image for 
-> the [Vanilla OS Core](https://github.com/vanilla-os/core-image) image.
+Containerfile for building a Vanilla OS Pico image.
+
+> This image is not intended to be used directly. It is used as a base image for the [Vanilla OS Core](https://github.com/vanilla-os/core-image) image.
 
 ## Build
 
