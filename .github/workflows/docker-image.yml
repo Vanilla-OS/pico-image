@@ -46,6 +46,11 @@ jobs:
         name: vanilla-pico-rootfs
         path: rootfs/vanilla-pico.tar.zst
 
+    - uses: actions/upload-artifact@v3
+      with:
+         name: Containerfile
+         path: Containerfile
+
     # Push the image to Nexus (Image Registry)
     # - name: Push To Registry
     #   uses: redhat-actions/push-to-registry@v2.7
