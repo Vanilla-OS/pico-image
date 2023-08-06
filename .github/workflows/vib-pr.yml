@@ -1,4 +1,4 @@
-name: Docker Image CI on PR
+name: Vib PR
 
 on:
   pull_request:
@@ -30,7 +30,14 @@ jobs:
         - name: Build the Docker image
           run: podman image build -f Containerfile --tag vanillaos/pico:validation .
 
-        - uses: actions/upload-artifact@v3
+        - name: Upload vanilla-pico-rootfs
+          uses: actions/upload-artifact@v3
           with:
             name: vanilla-pico-rootfs
             path: rootfs/vanilla-pico.tar.zst
+    
+        - name: Upload Containerfile
+          uses: actions/upload-artifact@v3
+          with:
+             name: Containerfile
+             path: Containerfile
