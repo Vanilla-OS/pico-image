@@ -34,3 +34,8 @@ jobs:
           with:
             name: vanilla-pico-rootfs
             path: rootfs/vanilla-pico.tar.zst
+
+        - uses: actions/upload-artifact@v3
+          with:
+           name: Containerfile
+           path: Containerfile
