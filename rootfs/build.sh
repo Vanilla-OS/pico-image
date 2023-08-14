@@ -37,6 +37,8 @@ fi
 
 mkdir -p $ROOTFS_NAME
 cp -r includes.rootfs/* $ROOTFS_NAME
+cp -r includes.rootfs/* / # let's see if the workaround actually... works around .-.
+apt update
 
 debootstrap \
     --variant=minbase \
