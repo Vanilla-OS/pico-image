@@ -2,7 +2,7 @@ name: Vib Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "test" ]
   workflow_dispatch:
 
 env:
@@ -12,8 +12,14 @@ env:
 jobs:
 
   build:
-
-    runs-on: ubuntu-latest
+    
+    runs-on: ubuntu-22.04
+    container:
+      image: ghcr.io/vanilla-os/pico:main
+      volumes:
+        - /proc:/proc
+        - /:/run/host
+      options: --privileged -it
 
     steps:
     - uses: actions/checkout@v3
@@ -36,10 +42,10 @@ jobs:
       run: docker image build -f Containerfile --tag ghcr.io/vanilla-os/pico:main .
 
     # Push the image to GHCR (Image Registry)
-    - name: Push To GHCR
-      run: |
-         docker login ghcr.io -u ${{ env.REGISTRY_USER }} -p ${{ env.REGISTRY_PASSWORD }}
-         docker image push "ghcr.io/vanilla-os/pico:main"
+    # - name: Push To GHCR
+    #   run: |
+    #      docker login ghcr.io -u ${{ env.REGISTRY_USER }} -p ${{ env.REGISTRY_PASSWORD }}
+    #      docker image push "ghcr.io/vanilla-os/pico:main"
 
     - uses: actions/upload-artifact@v3
       with:
