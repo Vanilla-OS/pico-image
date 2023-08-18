@@ -70,5 +70,4 @@ mkdir -p $ROOTFS_NAME/var/cache/apt/archives/partial
 # Compression
 tar -cvf $ROOTFS_NAME.tar -C $ROOTFS_NAME .
 zstd -19 $ROOTFS_NAME.tar
-rm $ROOTFS_NAME.tar
 chmod 644 $ROOTFS_NAME.tar.zst
