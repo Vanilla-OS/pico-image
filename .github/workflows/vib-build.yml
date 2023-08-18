@@ -44,3 +44,12 @@ jobs:
       with:
         name: vanilla-pico-rootfs
         path: rootfs/vanilla-pico.tar.zst
+
+    - uses: softprops/action-gh-release@v1
+      with:
+        token: "${{ secrets.GITHUB_TOKEN }}"
+        tag_name: "continuous"
+        prerelease: true
+        name: "Continuous Build"
+        files: |
+          rootfs/vanilla-pico.tar
