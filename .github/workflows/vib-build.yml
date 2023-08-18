@@ -37,7 +37,7 @@ jobs:
     - name: Create SHA256SUMS
       run: |
         cd rootfs
-        sha256sum vanilla-pico.tar.zst > SHA256SUMS
+        sha256sum vanilla-pico.tar.gz > SHA256SUMS
         cd ..
 
     # Push the image to GHCR (Image Registry)
@@ -58,5 +58,5 @@ jobs:
         prerelease: true
         name: "Continuous Build"
         files: |
-          rootfs/vanilla-pico.tar
+          rootfs/vanilla-pico.tar.gz
           rootfs/SHA256SUMS
