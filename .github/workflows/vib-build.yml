@@ -34,6 +34,12 @@ jobs:
     - name: Build the Docker image
       run: docker image build -f Containerfile --tag ghcr.io/vanilla-os/pico:main .
 
+    - name: Create SHA256SUMS
+      run: |
+        cd rootfs
+        sha256sum vanilla-pico.tar.zst > SHA256SUMS
+        cd ..
+
     # Push the image to GHCR (Image Registry)
     - name: Push To GHCR
       run: |
