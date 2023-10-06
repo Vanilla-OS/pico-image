@@ -16,8 +16,8 @@ CLEANUP_DIRS="/usr/share/doc/*
 /usr/share/locale/*
 /usr/share/omf/*/*-*.emf
 /var/cache
-/var/log
-/tmp"
+/var/log/*
+/tmp/*"
 
 # Root check - debootstrap requires root privileges
 if [ "$(id -u)" != "0" ];
