@@ -27,4 +27,4 @@ jobs:
           -H 'Accept:application/json' \
           -H "Authorization:Basic $(echo -n "${{ secrets.DIFFER_USER }}:${{ secrets.DIFFER_PSW }}" | base64)" \
           -d "{\"digest\":\"${IMAGE_DIGEST}\",${PACKAGE_LIST}}" \
-          $DIFFER_URL/images/pico/new
+          ${{ vars.DIFFER_URL }}/images/pico/new
