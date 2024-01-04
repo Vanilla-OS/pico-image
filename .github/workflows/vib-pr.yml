@@ -20,19 +20,19 @@ jobs:
             sudo sh build.sh
             cd ..
 
-        - uses: vanilla-os/vib-gh-action@v0
+        - uses: vanilla-os/vib-gh-action@v0.3.2-2
 
         - name: Build the Docker image
           run: podman image build -f Containerfile --tag vanillaos/pico:validation .
 
         - name: Upload vanilla-pico-rootfs
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
             name: vanilla-pico-rootfs
             path: rootfs/vanilla-pico.tar.zst
     
         - name: Upload Containerfile
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
              name: Containerfile
              path: Containerfile
