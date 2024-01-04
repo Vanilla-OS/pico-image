@@ -42,7 +42,7 @@ jobs:
          docker login ghcr.io -u ${{ env.REGISTRY_USER }} -p ${{ env.REGISTRY_PASSWORD }}
          docker image push "ghcr.io/vanilla-os/pico:main"
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: vanilla-pico-rootfs
         path: rootfs/vanilla-pico.tar.zst

@@ -19,25 +19,20 @@ jobs:
             cd rootfs
             sudo sh build.sh
             cd ..
-    
-        - name: Vib
-          run: |
-            wget https://github.com/Vanilla-OS/Vib/releases/download/v0.3.1/vib
-            chmod +x vib
-            ./vib build recipe.yml
-            sed -i '/\/var\/tmp\/*/{d}' Containerfile
-   
+
+        - uses: vanilla-os/vib-gh-action@v0.3.2-2
+
         - name: Build the Docker image
           run: podman image build -f Containerfile --tag vanillaos/pico:validation .
 
         - name: Upload vanilla-pico-rootfs
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
             name: vanilla-pico-rootfs
             path: rootfs/vanilla-pico.tar.zst
     
         - name: Upload Containerfile
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
              name: Containerfile
              path: Containerfile
