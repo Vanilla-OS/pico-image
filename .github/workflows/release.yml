@@ -1,0 +1,40 @@
+name: Vib release
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  tags:
+    - 'v*'
+  workflow_dispatch:
+
+env:
+    REGISTRY_USER: ${{ github.actor }}
+    REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+
+  release:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Rootfs
+      run: |
+        sudo apt install -y debootstrap podman
+        cd rootfs
+        sudo sh build.sh
+        cd ..
+
+    - uses: vanilla-os/vib-gh-action@v0.3.2-2
+
+    - name: Commit Containerfile
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add Containerfile
+        git commit -m "release: ${GITHUB_REF#refs/tags/}"
+        git push
