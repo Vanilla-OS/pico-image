@@ -16,12 +16,20 @@ env:
 
 jobs:
 
-  release:
+  generate:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Cache APT packages
+      uses: actions/cache@v4
+      with:
+        path: /var/cache/apt/archives
+        key: ${{ runner.os }}-apt-${{ hashFiles('**/apt.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-apt-
 
     - name: Rootfs
       run: |
@@ -32,15 +40,26 @@ jobs:
 
     - uses: vanilla-os/vib-gh-action@v0.3.2-2
 
-    - name: Commit Containerfile
-      run: |
-        mv Containerfile /tmp/Containerfile
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git clean -fxd
-        git fetch
-        git checkout release
-        cp /tmp/Containerfile Containerfile
-        git add Containerfile
-        git commit -m "release: ${GITHUB_REF#refs/tags/}"
-        git push
+    - name: Save Containerfile
+      id: save-containerfile
+      run: echo "::set-output name=file_path::Containerfile"
+
+  commit:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v4
+        with:
+          ref: 'release'
+
+      - name: Commit Containerfile
+        run: |
+          file_path="${{ steps.save-containerfile.outputs.file_path }}"
+          cp $file_path Containerfile
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add Containerfile
+          git commit -m "release: ${GITHUB_REF#refs/tags/}"
+          git push
