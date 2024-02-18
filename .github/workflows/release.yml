@@ -22,18 +22,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
-    - name: Cache APT packages
-      uses: actions/cache@v4
-      with:
-        path: /var/cache/apt/archives
-        key: ${{ runner.os }}-apt
-        restore-keys: |
-          ${{ runner.os }}-apt
+    - uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: debootstrap podman
+          version: 1.0
 
     - name: Rootfs
       run: |
-        sudo apt install -y debootstrap podman
         cd rootfs
         sudo sh build.sh
         cd ..
@@ -45,6 +40,12 @@ jobs:
       with:
         name: Containerfile
         path: Containerfile
+
+    - name: Save zst
+      uses: actions/upload-artifact@v4
+      with:
+        name: vanilla-pico.tar.zst
+        path: rootfs/vanilla-pico.tar.zst
 
   commit:
 
@@ -62,10 +63,17 @@ jobs:
         with:
           name: Containerfile
 
+      - name: Download zst
+        uses: actions/download-artifact@v4
+        with:
+          name: vanilla-pico.tar.zst
+
       - name: Commit Containerfile
         run: |
+          mkdir rootfs
+          mv vanilla-pico.tar.zst rootfs/vanilla-pico.tar.zst
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add Containerfile
+          git add .
           git commit -m "release: ${GITHUB_REF#refs/tags/}"
           git push
