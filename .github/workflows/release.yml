@@ -5,8 +5,9 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  tags:
-    - 'v*'
+  push:
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 env:
