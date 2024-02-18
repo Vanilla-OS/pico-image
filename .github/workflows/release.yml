@@ -23,9 +23,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: debootstrap podman
-          version: 1.0
+      with:
+        packages: debootstrap podman
+        version: 1.0
 
     - name: Rootfs
       run: |
