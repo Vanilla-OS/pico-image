@@ -34,8 +34,13 @@ jobs:
 
     - name: Commit Containerfile
       run: |
+        mv Containerfile /tmp/Containerfile
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        git clean -fxd
+        git fetch
+        git checkout release
+        cp /tmp/Containerfile Containerfile
         git add Containerfile
         git commit -m "release: ${GITHUB_REF#refs/tags/}"
         git push
