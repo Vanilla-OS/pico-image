@@ -1,9 +1,9 @@
-base: scratch
 name: Vanilla Pico
 id: vanilla-pico
 
 stages:
 - id: build
+  base: scratch
   singlelayer: true
   labels:
     maintainer: Vanilla OS Contributors
