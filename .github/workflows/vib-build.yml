@@ -25,7 +25,7 @@ jobs:
         sudo sh build.sh
         cd ..
 
-    - uses: vanilla-os/vib-gh-action@v0.6.0
+    - uses: vanilla-os/vib-gh-actionv0.6.2
 
     - name: Build the Docker image
       run: docker image build -f Containerfile --tag ghcr.io/vanilla-os/pico:main .
