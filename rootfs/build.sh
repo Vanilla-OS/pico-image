@@ -59,6 +59,7 @@ rm -rf $ROOTFS_NAME/etc/apt/sources.list
 # Cleanup
 chroot $ROOTFS_NAME apt update
 chroot $ROOTFS_NAME apt upgrade -y
+chroot $ROOTFS_NAME apt install -f -y
 chroot $ROOTFS_NAME apt clean
 chroot $ROOTFS_NAME apt autoremove -y
 
