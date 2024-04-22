@@ -9,4 +9,4 @@ stages:
     maintainer: Vanilla OS Contributors
   adds:
     rootfs/vanilla-pico.tar.zst: /
-  cmd: "/bin/bash"
+  cmd: ["/bin/bash"]
