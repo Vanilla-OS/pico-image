@@ -1,5 +1,5 @@
 name: Vanilla Pico
-id: vanilla-pico
+id: pico
 
 stages:
 - id: build
