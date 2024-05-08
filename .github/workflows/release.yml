@@ -15,9 +15,7 @@ env:
     REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-
   generate:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -28,10 +26,9 @@ jobs:
         version: 1.0
 
     - name: Rootfs
+      working-directory: rootfs
       run: |
-        cd rootfs
         sudo sh build.sh
-        cd ..
 
     - uses: vanilla-os/vib-gh-action@v0.7.0
 

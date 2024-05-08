@@ -2,45 +2,78 @@ name: Vib Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - 'main'
+    tags:
+      - '*'
   workflow_dispatch:
+  pull_request:
 
-env:
-    REGISTRY_USER: ${{ github.actor }}
-    REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+permissions:
+    contents: write # Allow actions to create release
+    packages: write # Allow pushing images to GHCR
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
 
     - name: Rootfs
+      working-directory: rootfs
       run: |
         sudo apt install -y debootstrap podman
-        cd rootfs
         sudo sh build.sh
-        cd ..
 
     - uses: vanilla-os/vib-gh-action@v0.7.0
 
-    - name: Build the Docker image
-      run: docker image build -f Containerfile --tag ghcr.io/vanilla-os/pico:main .
+    - name: Generate image name
+      run: |
+        REPO_OWNER_LOWERCASE="$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')"
+        echo "REPO_OWNER_LOWERCASE=$REPO_OWNER_LOWERCASE" >> "$GITHUB_ENV"
+        echo "IMAGE_NAME=ghcr.io/$REPO_OWNER_LOWERCASE/pico" >> "$GITHUB_ENV"
+
+    - name: Docker meta
+      id: docker_meta
+      uses: docker/metadata-action@v5
+      with:
+        images: |
+          ${{ env. IMAGE_NAME }}
+        tags: |
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{raw}}
+          type=semver,pattern=v{{major}}
+          type=ref,event=branch
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to GitHub Package Registry
+      uses: docker/login-action@v3
+      if: ${{ github.event_name == 'push' }}
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and Push the Docker image
+      id: push
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: Containerfile
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.docker_meta.outputs.tags }}
+        labels: ${{ steps.docker_meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
     - name: Create SHA256SUMS
+      working-directory: rootfs
       run: |
-        cd rootfs
         sha256sum vanilla-pico.tar.gz > SHA256SUMS
-        cd ..
-
-    # Push the image to GHCR (Image Registry)
-    - name: Push To GHCR
-      run: |
-         docker login ghcr.io -u ${{ env.REGISTRY_USER }} -p ${{ env.REGISTRY_PASSWORD }}
-         docker image push "ghcr.io/vanilla-os/pico:main"
 
     - uses: actions/upload-artifact@v4
       with:
@@ -48,6 +81,7 @@ jobs:
         path: rootfs/vanilla-pico.tar.zst
 
     - uses: softprops/action-gh-release@v2
+      if: github.repository == 'vanilla-os/pico-image' && github.ref == 'refs/heads/main'
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
         tag_name: "continuous"
