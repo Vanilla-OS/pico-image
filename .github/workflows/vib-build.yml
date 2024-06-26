@@ -15,6 +15,8 @@ env:
 permissions:
     contents: write # Allow actions to create release
     packages: write # Allow pushing images to GHCR
+    attestations: write # To create and write attestations
+    id-token: write # Additional permissions for the persistence of the attestations
 
 jobs:
   build:
@@ -29,20 +31,20 @@ jobs:
         sudo apt install -y debootstrap podman
         sudo sh build.sh
 
-    - uses: vanilla-os/vib-gh-action@v0.7.0
+    - uses: vanilla-os/vib-gh-action@v0.7.2
 
     - name: Generate image name
       run: |
         REPO_OWNER_LOWERCASE="$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')"
         echo "REPO_OWNER_LOWERCASE=$REPO_OWNER_LOWERCASE" >> "$GITHUB_ENV"
-        echo "IMAGE_NAME=ghcr.io/$REPO_OWNER_LOWERCASE/pico" >> "$GITHUB_ENV"
+        echo "IMAGE_URL=ghcr.io/$REPO_OWNER_LOWERCASE/pico" >> "$GITHUB_ENV"
 
     - name: Docker meta
       id: docker_meta
       uses: docker/metadata-action@v5
       with:
         images: |
-          ${{ env. IMAGE_NAME }}
+          ${{ env. IMAGE_URL }}
         tags: |
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
@@ -63,7 +65,7 @@ jobs:
 
     - name: Build and Push the Docker image
       id: push
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: .
         file: Containerfile
@@ -74,6 +76,15 @@ jobs:
         cache-to: type=gha,mode=max
         platforms: linux/amd64
         provenance: false
+    
+    - name: Attest pushed image
+      uses: actions/attest-build-provenance@v1
+      id: attest
+      if: ${{ github.event_name != 'pull_request' }}
+      with:
+        subject-name: ${{ env.IMAGE_URL }}
+        subject-digest: ${{ steps.push.outputs.digest }}
+        push-to-registry: false
 
     - name: Create SHA256SUMS
       working-directory: rootfs
