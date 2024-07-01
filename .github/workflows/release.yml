@@ -30,7 +30,7 @@ jobs:
       run: |
         sudo sh build.sh
 
-    - uses: vanilla-os/vib-gh-action@v0.7.0
+    - uses: vanilla-os/vib-gh-action@v0.7.2
 
     - name: Save Containerfile
       uses: actions/upload-artifact@v4
