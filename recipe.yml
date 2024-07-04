@@ -8,5 +8,8 @@ stages:
   labels:
     maintainer: Vanilla OS Contributors
   adds:
-    rootfs/vanilla-pico.tar.zst: /
-  cmd: ["/bin/bash"]
+    - srcdst:
+        rootfs/vanilla-pico.tar.zst: /
+  cmd:
+    exec:
+      - /bash
