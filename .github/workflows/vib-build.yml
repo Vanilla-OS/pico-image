@@ -92,10 +92,10 @@ jobs:
         subject-digest: ${{ steps.push.outputs.digest }}
         push-to-registry: false
 
-    - name: Create SHA256SUMS
+    - name: Create Checksum
       working-directory: rootfs
       run: |
-        sha256sum vanilla-pico.tar.gz > SHA256SUMS
+        sha256sum vanilla-pico.tar.gz > checksum.txt
 
     - uses: actions/upload-artifact@v4
       with:
@@ -111,4 +111,4 @@ jobs:
         name: "Continuous Build"
         files: |
           rootfs/vanilla-pico.tar.gz
-          rootfs/SHA256SUMS
+          rootfs/checksum.txt

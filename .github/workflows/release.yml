@@ -1,8 +1,4 @@
-name: Vib release
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+name: Release
 
 on:
   push:
@@ -15,62 +11,46 @@ env:
     REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  generate:
+  release:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write # Allow actions to create release
+      attestations: write # To create and write attestations
+      id-token: write # Additional permissions for the persistence of the attestations
+    
     steps:
-    - uses: actions/checkout@v4
-    - uses: awalsh128/cache-apt-pkgs-action@latest
-      with:
-        packages: debootstrap podman
-        version: 1.0
-
-    - name: Rootfs
-      working-directory: rootfs
-      run: |
-        sudo sh build.sh
-
-    - uses: vanilla-os/vib-gh-action@v0.7.3
-
-    - name: Save Containerfile
-      uses: actions/upload-artifact@v4
-      with:
-        name: Containerfile
-        path: Containerfile
-
-    - name: Save zst
-      uses: actions/upload-artifact@v4
-      with:
-        name: vanilla-pico.tar.zst
-        path: rootfs/vanilla-pico.tar.zst
-
-  commit:
-
-    runs-on: ubuntu-latest
-    needs: generate
-
-    steps:
-      - name: Checkout release branch
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: 'release'
+          fetch-depth: 0
 
-      - name: Download Containerfile
-        uses: actions/download-artifact@v4
-        with:
-          name: Containerfile
-
-      - name: Download zst
-        uses: actions/download-artifact@v4
-        with:
-          name: vanilla-pico.tar.zst
-
-      - name: Commit Containerfile
+      - name: Install debootstrap from Ubuntu git
         run: |
-          mkdir rootfs
-          mv vanilla-pico.tar.zst rootfs/vanilla-pico.tar.zst
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add .
-          git commit -m "release: ${GITHUB_REF#refs/tags/}"
-          git push
+            sudo git clone --depth 1 https://git.launchpad.net/ubuntu/+source/debootstrap /debootstrap
+            sudo chmod a+x /debootstrap/debootstrap
+            sudo ln -s /debootstrap/debootstrap -t /usr/local/bin
+  
+      - name: Build Rootfs
+        working-directory: rootfs
+        run: |
+          sudo apt install -y podman
+          sudo sh build.sh
+      
+      - uses: vanilla-os/vib-gh-action@v0.7.4
+      
+      - name: Create Checksum
+        working-directory: rootfs
+        run: |
+          sha256sum vanilla-pico.tar.gz > checksums.txt
+
+      - name: Create Release
+        working-directory: rootfs
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "${{ github.ref_name }}" --generate-notes vanilla-pico.tar.zst checksums.txt
+
+      - name: Attest Release Files
+        id: attest
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: 'Containerfile, rootfs/*.tar.gz, rootfs/checksums.txt'
