@@ -3,12 +3,8 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - '*'
   workflow_dispatch:
-
-env:
-    REGISTRY_USER: ${{ github.actor }}
-    REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   release:
