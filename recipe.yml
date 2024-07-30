@@ -1,5 +1,5 @@
-name: Vanilla Pico
-id: pico
+name: Vanilla Pico Vision
+id: pico-vision
 
 stages:
 - id: build
