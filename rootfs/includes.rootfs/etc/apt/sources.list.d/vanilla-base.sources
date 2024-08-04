@@ -1,5 +1,5 @@
 Types: deb
-URIs: http://repo2.vanillaos.org/
+URIs: http://testing.vanillaos.org/
 Suites: sid
 Architectures: amd64
 Components: main contrib non-free non-free-firmware
