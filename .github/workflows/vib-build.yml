@@ -12,15 +12,14 @@ on:
 env:
   BUILDX_NO_DEFAULT_ATTESTATIONS: 1
 
-permissions:
-    contents: write # Allow actions to create release
-    packages: write # Allow pushing images to GHCR
-    attestations: write # To create and write attestations
-    id-token: write # Additional permissions for the persistence of the attestations
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Allow actions to create release
+      packages: write # Allow pushing images to GHCR
+      attestations: write # To create and write attestations
+      id-token: write # Additional permissions for the persistence of the attestations
 
     steps:
     - uses: actions/checkout@v4
@@ -119,6 +118,7 @@ jobs:
         path: rootfs/vanilla-pico.tar.zst
 
     - uses: softprops/action-gh-release@v2
+      if:  ${{ github.event_name != 'pull_request' }}
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
         tag_name: "continuous"
@@ -127,3 +127,28 @@ jobs:
         files: |
           rootfs/vanilla-pico.tar.gz
           rootfs/checksum.txt
+
+  differ:
+    runs-on: ubuntu-latest
+    if:  github.ref_type == 'tag' && github.repository == 'vanilla-os/pico-image'
+    needs: build
+    container:
+      image: ghcr.io/vanilla-os/pico:main
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate package diff
+        run: |
+          PACKAGE_LIST=$(.github/gen_package_list.sh)
+          apt install -f -y
+          apt install -y curl
+          IMAGE_DIGEST=$(curl -s -L -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/orgs/Vanilla-OS/packages/container/pico/versions | grep -m1 name | sed -E 's/^\s*"name": "(.+)".*$/\1/')
+          curl -X POST \
+          -H 'Accept:application/json' \
+          -H "Authorization:Basic $(echo -n "${{ secrets.DIFFER_USER }}:${{ secrets.DIFFER_PSW }}" | base64)" \
+          -d "{\"digest\":\"${IMAGE_DIGEST}\",${PACKAGE_LIST}}" \
+          ${{ vars.DIFFER_URL }}/images/pico/new
