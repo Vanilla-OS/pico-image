@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Rootfs definitions
 ROOTFS_NAME="vanilla-pico"
 REPO_URL=http://testing.vanillaos.org
