@@ -24,11 +24,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Install debootstrap from Ubuntu git
+    - name: Install debootstrap
       run: |
-          sudo git clone --depth 1 https://git.launchpad.net/ubuntu/+source/debootstrap /debootstrap
-          sudo chmod a+x /debootstrap/debootstrap
-          sudo ln -s /debootstrap/debootstrap -t /usr/local/bin
+          sudo apt-get update
+          sudo apt-get install -y debootstrap
 
     - name: Replace testing repository with production
       if: ${{ github.ref_type == 'tag' }}
