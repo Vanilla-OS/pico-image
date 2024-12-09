@@ -47,6 +47,6 @@ jobs:
 
       - name: Attest Release Files
         id: attest
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v2
         with:
           subject-path: 'Containerfile, rootfs/*.tar.gz, rootfs/checksums.txt'
