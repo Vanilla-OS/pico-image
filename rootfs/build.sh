@@ -5,7 +5,6 @@ set -e
 # Rootfs definitions
 ROOTFS_NAME="vanilla-pico"
 REPO_URL=http://repo2.vanillaos.org
-REPO_KEY=vanilla.key
 CUSTOM_PACKAGE=""
 CLEANUP_DIRS="/usr/share/doc/*
 /usr/share/info/*
@@ -49,9 +48,6 @@ debootstrap \
     sid \
     $ROOTFS_NAME \
     $REPO_URL
-
-# Add the vanilla extra repository key
-chroot $ROOTFS_NAME apt-key add /$REPO_KEY
 
 # We need to remove the sources.list file since it is not needed
 # after the debootstrap process. include.chroot already contains
