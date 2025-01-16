@@ -29,6 +29,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y debootstrap
 
+    - name: Replace production with testing
+      if: ${{ github.ref_type != 'tag' }}
+      run: |
+        sed 's|http://repo2.vanillaos.org|http://testing.vanillaos.org|g' -i rootfs/build.sh
+        sed 's|http://repo2.vanillaos.org|http://testing.vanillaos.org|g' -i rootfs/includes.rootfs/etc/apt/sources.list.d/vanilla-base.sources
+
     - name: Rootfs
       working-directory: rootfs
       run: |
