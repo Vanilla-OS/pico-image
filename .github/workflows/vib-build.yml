@@ -41,7 +41,7 @@ jobs:
         sudo apt install -y podman
         sudo sh build.sh
 
-    - uses: vanilla-os/vib-gh-action@v0.8.1
+    - uses: vanilla-os/vib-gh-action@v1.0.0
 
     - name: Generate image name
       run: |
