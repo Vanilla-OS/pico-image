@@ -1,5 +1,6 @@
 name: Vanilla Pico
 id: pico
+vibversion: 1.0.0
 
 stages:
 - id: build
