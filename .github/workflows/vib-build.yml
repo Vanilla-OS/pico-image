@@ -43,6 +43,11 @@ jobs:
 
     - uses: vanilla-os/vib-gh-action@v1.0.0
 
+    - uses: actions/upload-artifact@v4
+      with:
+        name: Containerfile
+        path: Containerfile
+
     - name: Generate image name
       run: |
         REPO_OWNER_LOWERCASE="$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')"
@@ -124,6 +129,7 @@ jobs:
         prerelease: true
         name: "Continuous Build"
         files: |
+          Containerfile
           rootfs/vanilla-pico.tar.gz
           rootfs/checksum.txt
 

@@ -33,6 +33,11 @@ jobs:
           sudo sh build.sh
       
       - uses: vanilla-os/vib-gh-action@v1.0.0
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Containerfile
+          path: Containerfile
       
       - name: Create Checksum
         working-directory: rootfs
@@ -44,6 +49,9 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release create "${{ github.ref_name }}" --generate-notes vanilla-pico.tar.zst checksums.txt
+
+      - name: Upload Containerfile to Release
+        run: gh release upload "${{ github.ref_name }}" Containerfile
 
       - name: Attest Release Files
         id: attest
