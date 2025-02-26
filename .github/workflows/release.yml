@@ -51,6 +51,8 @@ jobs:
         run: gh release create "${{ github.ref_name }}" --generate-notes vanilla-pico.tar.zst checksums.txt
 
       - name: Upload Containerfile to Release
+        env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload "${{ github.ref_name }}" Containerfile
 
       - name: Attest Release Files
