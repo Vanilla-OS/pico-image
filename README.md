@@ -12,7 +12,7 @@ You need the [Vib](https://github.com/vanilla-os/Vib) tool to generate the Conta
 ```bash
 cd rootfs && sh build.sh && cd ..
 vib build recipe.yml
-podman image build -t vanillaos/pico .
+podman image build --cap-add CAP_MKNOD -t vanillaos/pico .
 ```
 
 ## Verify Image Build Provenance Attestation
