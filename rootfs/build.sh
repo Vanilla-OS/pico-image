@@ -12,6 +12,13 @@ CLEANUP_DIRS="/usr/share/doc/*
 /usr/share/locale/*
 /usr/share/man/*"
 
+# Target architecture
+ARCH_OPTION=""
+if [ -n "$ARCH" ]; then
+  ROOTFS_NAME=$ROOTFS_NAME-$ARCH
+  ARCH_OPTION=--arch=$ARCH
+fi
+
 # Root check - debootstrap requires root privileges
 if [ "$(id -u)" != "0" ];
   then echo "This script must be run as root"
@@ -33,7 +40,7 @@ fi
 mkdir -p $ROOTFS_NAME
 cp -r includes.rootfs/* $ROOTFS_NAME
 
-debootstrap \
+debootstrap $ARCH_OPTION \
     --variant=minbase \
     --include=$CUSTOM_PACKAGE,apt-utils,apt-transport-https,ca-certificates,gnupg2,bash,bzip2 \
     --keyring=includes.rootfs/usr/share/keyrings/vanilla_keyring.gpg \
