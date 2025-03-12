@@ -10,24 +10,28 @@ on:
 env:
   BUILDX_NO_DEFAULT_ATTESTATIONS: 1
 
-permissions:
-    contents: write # Allow actions to create release
-    packages: write # Allow pushing images to GHCR
-    attestations: write # To create and write attestations
-    id-token: write # Additional permissions for the persistence of the attestations
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Allow actions to create release
+      packages: write # Allow pushing images to GHCR
+      attestations: write # To create and write attestations
+      id-token: write # Additional permissions for the persistence of the attestations
 
     steps:
     - uses: actions/checkout@v4
     
-    - name: Install debootstrap from Ubuntu git
+    - name: Install debootstrap
       run: |
-          sudo git clone --depth 1 https://git.launchpad.net/ubuntu/+source/debootstrap /debootstrap
-          sudo chmod a+x /debootstrap/debootstrap
-          sudo ln -s /debootstrap/debootstrap -t /usr/local/bin
+          sudo apt-get update
+          sudo apt-get install -y debootstrap
+
+    - name: Replace production with testing
+      if: ${{ github.ref_type != 'tag' }}
+      run: |
+        sed 's|http://repo2.vanillaos.org|http://testing.vanillaos.org|g' -i rootfs/build.sh
+        sed 's|http://repo2.vanillaos.org|http://testing.vanillaos.org|g' -i rootfs/includes.rootfs/etc/apt/sources.list.d/vanilla-base.sources
 
     - name: Rootfs
       working-directory: rootfs
@@ -35,13 +39,28 @@ jobs:
         sudo apt install -y podman
         sudo sh build.sh
 
-    - uses: vanilla-os/vib-gh-action@v0.7.4
+    - uses: vanilla-os/vib-gh-action@v1.0.0
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: Containerfile
+        path: Containerfile
 
     - name: Generate image name
       run: |
         REPO_OWNER_LOWERCASE="$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')"
         echo "REPO_OWNER_LOWERCASE=$REPO_OWNER_LOWERCASE" >> "$GITHUB_ENV"
         echo "IMAGE_URL=ghcr.io/$REPO_OWNER_LOWERCASE/pico" >> "$GITHUB_ENV"
+
+    - name: Extra image tag branch
+      if: ${{ github.ref_type != 'tag' }}
+      run: |
+        echo "EXTRA_TAG=ref,event=branch" >> "$GITHUB_ENV"
+
+    - name: Extra image tag release
+      if: ${{ github.ref_type == 'tag' }}
+      run: |
+        echo "EXTRA_TAG=raw,main" >> "$GITHUB_ENV"
 
     - name: Docker meta
       id: docker_meta
@@ -78,7 +97,7 @@ jobs:
         provenance: false
     
     - name: Attest pushed image
-      uses: actions/attest-build-provenance@v1
+      uses: actions/attest-build-provenance@v2
       id: attest
       if: ${{ github.event_name != 'pull_request' }}
       with:
@@ -100,6 +119,7 @@ jobs:
           rootfs/vanilla-pico.tar.zst
 
     - uses: softprops/action-gh-release@v2
+      if:  ${{ github.event_name != 'pull_request' }}
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
         tag_name: "continuous-vision"
@@ -107,5 +127,6 @@ jobs:
         generate_release_notes: false
         name: "Continuous Build (Vision)"
         files: |
+          Containerfile
           rootfs/vanilla-pico.tar.gz
-          rootfs/checksums.txt
+          rootfs/checksum.txt

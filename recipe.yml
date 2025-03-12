@@ -1,5 +1,6 @@
 name: Vanilla Pico Vision
 id: pico-vision
+vibversion: 1.0.0
 
 stages:
 - id: build
