@@ -13,4 +13,4 @@ stages:
         rootfs/vanilla-pico.tar.zst: /
   cmd:
     exec:
-      - /bash
+      - /bin/bash
