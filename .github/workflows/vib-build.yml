@@ -22,7 +22,7 @@ jobs:
       id-token: write # Additional permissions for the persistence of the attestations
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     
     - name: Install debootstrap
       run: |
@@ -141,7 +141,7 @@ jobs:
       image: ghcr.io/vanilla-os/pico:main
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Generate package diff
         run: |
