@@ -43,7 +43,7 @@ jobs:
 
     - uses: vanilla-os/vib-gh-action@v1.0.6
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: Containerfile
         path: Containerfile
@@ -116,7 +116,7 @@ jobs:
       run: |
         sha256sum vanilla-pico.tar.gz > checksum.txt
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: vanilla-pico-rootfs
         path: rootfs/vanilla-pico.tar.zst
