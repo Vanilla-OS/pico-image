@@ -4,7 +4,7 @@ set -e
 
 # Rootfs definitions
 ROOTFS_NAME="vanilla-pico"
-REPO_URL=http://repo2.vanillaos.org
+REPO_URL=https://repo3.vanillaos.org/20251129T023004Z
 CUSTOM_PACKAGE=""
 CLEANUP_DIRS="/usr/share/doc/*
 /usr/share/info/*
@@ -44,7 +44,6 @@ cp -r includes.rootfs/* $ROOTFS_NAME
 debootstrap \
     --variant=minbase \
     --include=$CUSTOM_PACKAGE,apt-utils,apt-transport-https,ca-certificates,gnupg2,bash,bzip2 \
-    --keyring=includes.rootfs/usr/share/keyrings/vanilla_keyring.gpg \
     sid \
     $ROOTFS_NAME \
     $REPO_URL
