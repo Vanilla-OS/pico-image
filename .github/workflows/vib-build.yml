@@ -49,14 +49,14 @@ jobs:
         sudo sh build.sh
         cp vanilla-pico.tar.zst vanilla-pico-${{ matrix.arch }}.tar.zst
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: vanilla-pico-rootfs-${{ matrix.arch }}
         path: rootfs/vanilla-pico-${{ matrix.arch }}.tar.zst
 
     - uses: vanilla-os/vib-gh-action@v1.0.7
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: Containerfile
         path: Containerfile
@@ -116,7 +116,7 @@ jobs:
         touch "${{ runner.temp }}/digests/${digest#sha256:}"
 
     - name: Upload digest
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       if: ${{ github.event_name != 'pull_request' }}
       with:
         name: digests-${{ matrix.arch }}
