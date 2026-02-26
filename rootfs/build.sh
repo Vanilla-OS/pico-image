@@ -6,19 +6,15 @@ set -e
 ROOTFS_NAME="vanilla-pico"
 REPO_URL=https://repo3.vanillaos.org/20251129T023004Z
 CUSTOM_PACKAGE=""
-CLEANUP_DIRS="/usr/share/doc/*
-/usr/share/info/*
-/usr/share/linda/*
-/usr/share/lintian/overrides/*
-/usr/share/locale/*
-/usr/share/man/*
-/usr/share/doc/kde/HTML/*/*
-/usr/share/gnome/help/*/*
-/usr/share/locale/*
-/usr/share/omf/*/*-*.emf
-/var/cache
-/var/log/*
-/tmp/*"
+CLEANUPS=(
+  "/usr/share/doc/*"
+  "/usr/share/info/*"
+  "/usr/share/lintian/overrides/*"
+  "/usr/share/locale/*"
+  "/usr/share/man/*"
+  "/var/cache"
+  "/var/log/*"
+)
 
 # Root check - debootstrap requires root privileges
 if [ "$(id -u)" != "0" ];
@@ -60,8 +56,8 @@ chroot $ROOTFS_NAME apt install -f -y
 chroot $ROOTFS_NAME apt clean
 chroot $ROOTFS_NAME apt autoremove -y
 
-for dir in $CLEANUP_DIRS; do
-    rm -rf $ROOTFS_NAME/$dir
+for path in "${CLEANUPS[@]}"; do
+  rm -rf $ROOTFS_NAME$path
 done
 
 # Restore apt cache directory
