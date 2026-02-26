@@ -46,7 +46,7 @@ jobs:
       working-directory: rootfs
       run: |
         sudo apt install -y podman
-        sudo sh build.sh
+        sudo bash build.sh
         cp vanilla-pico.tar.zst vanilla-pico-${{ matrix.arch }}.tar.zst
 
     - uses: actions/upload-artifact@v6

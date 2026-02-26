@@ -10,7 +10,7 @@ Containerfile for building a Vanilla OS Pico image.
 You need the [Vib](https://github.com/vanilla-os/Vib) tool to generate the Containerfile.
 
 ```bash
-cd rootfs && sh build.sh && cd ..
+cd rootfs && bash build.sh && cd ..
 vib build recipe.yml
 podman image build -t vanillaos/pico .
 ```
