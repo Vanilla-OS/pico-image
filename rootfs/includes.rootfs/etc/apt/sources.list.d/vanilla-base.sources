@@ -1,5 +1,5 @@
 Types: deb
-URIs: https://repo3.vanillaos.org/20251129T023004Z
+URIs: https://repo3.vanillaos.org/20260224T144255Z
 Suites: sid
 Components: main contrib non-free non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
