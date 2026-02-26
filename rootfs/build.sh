@@ -14,6 +14,8 @@ CLEANUPS=(
   "/usr/share/man/*"
   "/var/cache"
   "/var/log/*"
+  "/etc/hostname"
+  "/etc/resolv.conf"
 )
 
 # Root check - debootstrap requires root privileges
