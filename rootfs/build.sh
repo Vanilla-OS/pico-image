@@ -36,15 +36,14 @@ if [ ! -d "includes.rootfs" ]; then
   exit 1
 fi
 
-mkdir -p $ROOTFS_NAME
-cp -r includes.rootfs/* $ROOTFS_NAME
-
 debootstrap \
     --variant=minbase \
     --include=$CUSTOM_PACKAGE,apt-utils,apt-transport-https,ca-certificates,gnupg2,bash,bzip2 \
     sid \
     $ROOTFS_NAME \
     $REPO_URL
+
+cp -r includes.rootfs/* $ROOTFS_NAME
 
 # We need to remove the sources.list file since it is not needed
 # after the debootstrap process. include.chroot already contains
