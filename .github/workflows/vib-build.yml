@@ -146,7 +146,7 @@ jobs:
         echo "IMAGE_URL=ghcr.io/$REPO_OWNER_LOWERCASE/pico" >> "$GITHUB_ENV"
 
     - name: Download digests
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         path: ${{ runner.temp }}/digests
         pattern: digests-*
@@ -190,11 +190,11 @@ jobs:
         docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
           $(printf '${{ env.IMAGE_URL }}@sha256:%s ' *)
 
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: Containerfile
 
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         path: rootfs
         pattern: vanilla-pico-rootfs-*
