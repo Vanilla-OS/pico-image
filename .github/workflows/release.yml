@@ -34,7 +34,7 @@ jobs:
       
       - uses: vanilla-os/vib-gh-action@v1.0.7
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: Containerfile
           path: Containerfile
