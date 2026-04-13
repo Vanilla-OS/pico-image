@@ -204,7 +204,7 @@ jobs:
       working-directory: rootfs
       run: sha256sum vanilla-pico-*.tar.zst > checksum.txt
 
-    - uses: softprops/action-gh-release@v2
+    - uses: softprops/action-gh-release@v3
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
         tag_name: "continuous"
