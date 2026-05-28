@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'dev'
+      - 'vision'
     tags:
       - '*'
   workflow_dispatch:
@@ -35,12 +36,6 @@ jobs:
       run: |
           sudo apt-get update
           sudo apt-get install -y debootstrap
-
-    - name: Replace production with testing
-      if: ${{ github.ref_type != 'tag' }}
-      run: |
-        sed 's|http://repo2.vanillaos.org|http://testing.vanillaos.org|g' -i rootfs/build.sh
-        sed 's|http://repo2.vanillaos.org|http://testing.vanillaos.org|g' -i rootfs/includes.rootfs/etc/apt/sources.list.d/vanilla-base.sources
 
     - name: Rootfs
       working-directory: rootfs
@@ -160,7 +155,7 @@ jobs:
     - name: Extra image tag release
       if: ${{ github.ref_type == 'tag' }}
       run: |
-        echo "EXTRA_TAG=raw,main" >> "$GITHUB_ENV"
+        echo "EXTRA_TAG=raw,latest" >> "$GITHUB_ENV"
 
     - name: Docker meta
       id: meta
