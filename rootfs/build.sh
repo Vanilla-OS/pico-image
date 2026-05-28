@@ -4,7 +4,7 @@ set -e
 
 # Rootfs definitions
 ROOTFS_NAME="vanilla-pico"
-REPO_URL=https://repo3.vanillaos.org/20260224T144255Z
+REPO_URL=https://repo3.vanillaos.org/20260528T022539Z
 CUSTOM_PACKAGE=""
 CLEANUPS=(
   "/usr/share/doc/*"
