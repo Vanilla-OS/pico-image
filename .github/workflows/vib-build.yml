@@ -215,7 +215,7 @@ jobs:
     if: github.ref_type == 'tag' && github.repository == 'vanilla-os/pico-image'
     needs: merge
     container:
-      image: ghcr.io/vanilla-os/pico:main
+      image: ghcr.io/vanilla-os/pico:latest
 
     steps:
       - uses: actions/checkout@v6
