@@ -195,9 +195,9 @@ jobs:
         pattern: vanilla-pico-rootfs-*
         merge-multiple: true
 
-    - name: Create Checksum
+    - name: Create Checksums
       working-directory: rootfs
-      run: sha256sum vanilla-pico-*.tar.zst > checksum.txt
+      run: sha256sum vanilla-pico-*.tar.zst > checksums.txt
 
     - uses: softprops/action-gh-release@v3
       with:
@@ -208,7 +208,7 @@ jobs:
         files: |
           Containerfile
           rootfs/vanilla-pico-*.tar.zst
-          rootfs/checksum.txt
+          rootfs/checksums.txt
 
   differ:
     runs-on: ubuntu-latest
