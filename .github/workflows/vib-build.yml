@@ -28,7 +28,7 @@ jobs:
       packages: write # Allow pushing images to GHCR
 
     steps:
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@v7.0.1
 
     - name: Install debootstrap
       run: |
@@ -220,7 +220,7 @@ jobs:
       image: ghcr.io/vanilla-os/pico:latest
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
 
       - name: Generate package diff
         run: |
